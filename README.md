@@ -83,7 +83,16 @@ Example:
 ## Other
 - Change resolution: `-vf scale=<WIDTH>:<HEIGHT>` (if you want to save aspect ratio, use `-1` for one of dimensions)
 
+### How to cut video
+- Cut video: `ffmpeg -ss <START> -i <INPUT_FILE> -t <DURATION> -c:v <VIDEO_CODEC> <VIDEO_OPTIONS> -c:a <AUDIO_CODEC> <AUDIO_OPTIONS> <OUTPUT_FILE>`
+
+- Examples:
+  - `ffmpeg -ss 15:21.462 -i <INPUT_FILE> -t 162.247 -c:v libvpx-vp9 -crf 31 -b:v 0 -cpu-used 0 -c:a libopus -b:a 320k <OUTPUT_FILE>`
+  - With burned subtitles:
+  `ffmpeg -ss 15:21.462 -i <INPUT_FILE> -t 162.247 -c:v libvpx-vp9 -crf 31 -b:v 0 -cpu-used 0 -vf "setpts=PTS+921.462/TB,subtitles='<SUBTITLES_FILE>',setpts=PTS-STARTPTS" -c:a libopus -b:a 320k <OUTPUT_FILE>`
+
 ## Notes
 1. To calculate the bitrate to use for multi-channel audio: (_bitrate for stereo_) x (_channels_ / 2).
 2. If using `libopus` with multi-channel audio (>stereo) should use `-af "channelmap=channel_layout=<LAYOUT>"`. For example, `-af "channelmap=channel_layout=5.1"`
 3. https://trac.ffmpeg.org/wiki/Encode/HighQualityAudio
+4. https://trac.ffmpeg.org/wiki/Seeking
